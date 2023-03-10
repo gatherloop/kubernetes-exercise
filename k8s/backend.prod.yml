@@ -18,6 +18,16 @@ spec:
           env:
             - name: PORT
               value: "80"
+            - name: DB_HOST
+              value: "143.42.79.254"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "biodata"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: "root"
 ---
 apiVersion: v1
 kind: Service

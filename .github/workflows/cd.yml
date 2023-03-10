@@ -33,5 +33,6 @@ jobs:
         run: |
           kubectl apply -f k8s/frontend.prod.yml
           kubectl apply -f k8s/backend.prod.yml
+          kubectl apply -f k8s/database.prod.yml
           kubectl set image deployment/kubernetes-exercise-frontend kubernetes-exercise-frontend=gatherloop/kubernetes-exercise-frontend:${{ github.sha }}
           kubectl set image deployment/kubernetes-exercise-backend kubernetes-exercise-backend=gatherloop/kubernetes-exercise-backend:${{ github.sha }}

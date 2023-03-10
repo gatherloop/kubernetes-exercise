@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-exercise-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-exercise-database
+  template:
+    metadata:
+      labels:
+        app: kubernetes-exercise-database
+    spec:
+      containers:
+        - name: kubernetes-exercise-database
+          image: mysql:5.7
+          args:
+            - "--ignore-db-dir=lost+found"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+          volumeMounts:
+            - name: kubernetes-exercise-database
+              mountPath: /var/lib/mysql
+            - name: kubernetes-exercise-database-init
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: kubernetes-exercise-database
+          persistentVolumeClaim:
+            claimName: kubernetes-exercise-database
+        - name: kubernetes-exercise-database-init
+          configMap:
+            name: kubernetes-exercise-database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-exercise-database
+spec:
+  type: LoadBalancer
+  selector:
+    app: kubernetes-exercise-database
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kubernetes-exercise-database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubernetes-exercise-database
+data:
+  initdb.sql: |
+    CREATE DATABASE  IF NOT EXISTS `biodata`;
+    USE `biodata`;
+
+    DROP TABLE IF EXISTS `students`;
+    CREATE TABLE `students` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `age` int NOT NULL DEFAULT '0',
+      `address` longtext,
+      `phone` varchar(12) DEFAULT NULL,
+      PRIMARY KEY (`id`,`age`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+
+    INSERT INTO `students` VALUES (1,'aka',24,'Condong, Gading, Probolinggo','085372362718'),(2,'andri',30,'Condong, Gading, Probolinggo','085372838291'),(3,'ilham',35,'Maron, Probolinggo','085372839284'),(4,'Budi',21,'Aceh','0822222222'),(5,'Budi',21,'Aceh','08123456789'),(6,'Adi',21,'Kraksaan','08123456789'),(7,'Dani',1,'1','1'),(8,'Indra',1,'1','1');
