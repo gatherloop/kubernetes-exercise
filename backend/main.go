@@ -43,11 +43,11 @@ func connect(config Config) (*sql.DB, error) {
 }
 
 type Student struct {
-	Id      int
-	Name    string
-	Age     int
-	Address string
-	Phone   string
+	Id      int    `json:"id"`
+	Name    string `json:"name"`
+	Age     int    `json:"age"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
 }
 
 func main() {
@@ -92,6 +92,9 @@ func main() {
 			return
 		}
 
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS")
 		w.Write(jsonData)
 	})
 

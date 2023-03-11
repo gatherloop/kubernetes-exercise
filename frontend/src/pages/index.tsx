@@ -1,11 +1,31 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import React from "react";
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@/styles/Home.module.css";
+import getConfig from "next/config";
 
-const inter = Inter({ subsets: ['latin'] })
+const { publicRuntimeConfig } = getConfig();
+
+const inter = Inter({ subsets: ["latin"] });
+
+type Student = {
+  id: 1;
+  name: "aka";
+  age: 24;
+  address: "Condong, Gading, Probolinggo";
+  phone: "085372362718";
+};
 
 export default function Home() {
+  const [students, setStudents] = React.useState<Student[]>([]);
+
+  React.useEffect(() => {
+    fetch(`${publicRuntimeConfig.apiUrl}`)
+      .then((res) => res.json())
+      .then((students: Student[]) => setStudents(students));
+  }, []);
+
   return (
     <>
       <Head>
@@ -27,7 +47,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{' '}
+              By{" "}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -38,6 +58,14 @@ export default function Home() {
               />
             </a>
           </div>
+        </div>
+
+        <div>
+          <ol>
+            {students.map(({ Id, Name }) => (
+              <li key={Id}>{Name}</li>
+            ))}
+          </ol>
         </div>
 
         <div className={styles.center}>
@@ -120,5 +148,5 @@ export default function Home() {
         </div>
       </main>
     </>
-  )
+  );
 }
