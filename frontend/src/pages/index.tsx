@@ -62,8 +62,8 @@ export default function Home() {
 
         <div>
           <ol>
-            {students.map(({ Id, Name }) => (
-              <li key={Id}>{Name}</li>
+            {students.map(({ id, name }) => (
+              <li key={id}>{name}</li>
             ))}
           </ol>
         </div>
