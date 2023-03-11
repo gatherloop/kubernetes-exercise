@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import getConfig from "next/config";
+import { GetServerSideProps } from "next";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -17,15 +18,20 @@ type Student = {
   phone: "085372362718";
 };
 
-export default function Home() {
-  const [students, setStudents] = React.useState<Student[]>([]);
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+  const students = await fetch(`${publicRuntimeConfig.apiUrl}`).then((res) =>
+    res.json()
+  );
+  return {
+    props: { students },
+  };
+};
 
-  React.useEffect(() => {
-    fetch(`${publicRuntimeConfig.apiUrl}`)
-      .then((res) => res.json())
-      .then((students: Student[]) => setStudents(students));
-  }, []);
+type HomeProps = {
+  students: Student[];
+};
 
+export default function Home(props: HomeProps) {
   return (
     <>
       <Head>
@@ -62,7 +68,7 @@ export default function Home() {
 
         <div>
           <ol>
-            {students.map(({ id, name }) => (
+            {props.students.map(({ id, name }) => (
               <li key={id}>{name}</li>
             ))}
           </ol>
