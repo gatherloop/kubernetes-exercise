@@ -42,7 +42,7 @@ export default function Home(props: HomeProps) {
       </Head>
       <main className={styles.main}>
         <div className={styles.description}>
-          <p>New Hello World</p>
+          <p>New Hello World !!</p>
           <p>
             Get started by editing&nbsp;
             <code className={styles.code}>src/pages/index.tsx</code>
