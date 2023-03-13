@@ -19,7 +19,10 @@ spec:
             - "--ignore-db-dir=lost+found"
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_PASSWORD
           volumeMounts:
             - name: kubernetes-exercise-database
               mountPath: /var/lib/mysql

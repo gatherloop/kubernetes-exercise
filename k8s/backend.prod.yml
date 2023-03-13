@@ -19,15 +19,30 @@ spec:
             - name: PORT
               value: "80"
             - name: DB_HOST
-              value: "143.42.79.254"
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_HOST
             - name: DB_PORT
-              value: "3306"
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_PORT
             - name: DB_NAME
-              value: "biodata"
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_NAME
             - name: DB_USERNAME
-              value: "root"
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_USERNAME
             - name: DB_PASSWORD
-              value: "root"
+              valueFrom:
+                secretKeyRef:
+                  name: kubernetes-exercise
+                  key: DB_PASSWORD
 ---
 apiVersion: v1
 kind: Service
